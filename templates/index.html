@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CareerCompassNG – Intelligent Guidance. Brighter Futures.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --purple: #4f46e5;
+    --purple-light: #818cf8;
+    --purple-pale: #eef2ff;
+    --blue: #3b82f6;
+    --teal: #14b8a6;
+    --teal-light: #5eead4;
+    --green: #22c55e;
+    --gray-50: #f8f9ff;
+    --gray-100: #f1f3fb;
+    --gray-200: #e5e9f5;
+    --gray-400: #9ca3af;
+    --gray-600: #6b7280;
+    --gray-900: #111827;
+    --card-shadow: 0 4px 24px rgba(79,70,229,0.08), 0 1px 4px rgba(0,0,0,0.04);
+    --card-shadow-hover: 0 8px 36px rgba(79,70,229,0.14), 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    justify-content: center;
+    padding: 12px 0 0;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+  }
+  .logo-icon svg { width: 18px; height: 18px; }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 16px 20px 5px;
+  }
+  .hero h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.12;
+    color: var(--gray-900);
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+  .hero h1 span { color: var(--purple); }
+  .hero p {
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    color: var(--gray-600);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* ── FLOW SECTION ── */
+  .flow-section {
+    position: relative;
+    padding: 10px 40px 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+    transform: scale(0.8);
+    transform-origin: top center;
+  }
+
+  /* Floating student avatars */
+  .avatar-float {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 16px rgba(79,70,229,0.18);
+    overflow: hidden;
+    background: var(--purple-pale);
+  }
+  .avatar-float svg { width: 60%; height: 60%; }
+  .av1 { width: 56px; height: 56px; top: 10px; left: 24px; }
+  .av2 { width: 48px; height: 48px; top: 80px; left: 8px; }
+  .av3 { width: 70px; height: 70px; top: 0px; right: 20px; }
+  .av4 { width: 56px; height: 56px; top: 90px; right: 2px; }
+  .av5 { width: 52px; height: 52px; bottom: 30px; right: 16px; }
+
+  /* Dot decorations */
+  .dot {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--purple-light);
+    opacity: 0.4;
+  }
+  .dot1 { width: 8px; height: 8px; top: 50px; left: 76px; }
+  .dot2 { width: 5px; height: 5px; top: 120px; left: 44px; }
+  .dot3 { width: 6px; height: 6px; bottom: 60px; left: 100px; }
+
+  /* SVG wave connector */
+  .wave-connector {
+    position: absolute;
+    top: 130px;
+    left: 130px;
+    right: 130px;
+    height: 100px;
+    pointer-events: none;
+  }
+
+  /* Cards row */
+  .cards-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    position: relative;
+    z-index: 2;
+    padding: 0 80px;
+  }
+
+  .step-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .step-card {
+    width: 150px;
+    height: 160px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .step-card:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-4px);
+  }
+
+  /* Center compass card */
+  .step-card.center {
+    width: 170px;
+    height: 180px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3730a3 0%, #4f46e5 50%, #6366f1 100%);
+    box-shadow: 0 8px 40px rgba(79,70,229,0.35);
+    border: 6px solid #c7d2fe;
+  }
+
+  .card-icon { width: 80px; height: 80px; }
+  .center .card-icon { width: 70px; height: 70px; }
+
+  /* Badge checkmarks */
+  .badge-check {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    width: 26px;
+    height: 26px;
+    background: var(--green);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .badge-check svg { width: 12px; height: 12px; }
+
+  .badge-medal {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    width: 26px;
+    height: 26px;
+    background: var(--green);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Step numbers */
+  .step-num {
+    margin-top: 14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .num-purple { background: var(--purple); }
+  .num-violet { background: #7c3aed; }
+  .num-blue   { background: var(--blue); }
+  .num-teal   { background: var(--teal); }
+  .num-teal2  { background: #0d9488; }
+
+  .step-title {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-900);
+    text-align: center;
+    padding: 0 4px;
+  }
+  .step-desc {
+    margin-top: 6px;
+    font-size: 11.5px;
+    color: var(--gray-600);
+    text-align: center;
+    line-height: 1.55;
+    max-width: 140px;
+  }
+
+  /* ── WAVE SVG behind cards ── */
+  .wave-svg-wrap {
+    position: absolute;
+    top: 115px;
+    left: 160px;
+    right: 160px;
+    height: 80px;
+    z-index: 1;
+  }
+
+  /* ── FEATURES ROW ── */
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 0px 60px 0;
+    max-width: 1100px;
+    margin: -30px auto 0;
+    transform: scale(0.85);
+    transform-origin: top center;
+  }
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 28px;
+    flex: 1;
+  }
+  .feature-icon {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    color: var(--purple);
+  }
+  .feature-text h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+  }
+  .feature-text p {
+    font-size: 12px;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+
+  /* ── CTA ── */
+  .cta-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 0px 0 20px;
+    margin-top: -10px;
+  }
+  .cta-btn {
+    background: linear-gradient(135deg, #4338ca, #6366f1);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 36px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 28px rgba(79,70,229,0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(79,70,229,0.45);
+  }
+  @keyframes bounceRight {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+  .cta-btn svg { 
+    width: 20px; 
+    height: 20px; 
+    animation: bounceRight 1.5s infinite ease-in-out;
+  }
+
+  /* Animated wave using CSS */
+  @keyframes waveShift { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -60; } }
+
+  /* ── CUSTOM SVG ANIMATIONS ── */
+  @keyframes floatBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .av1 { animation: floatBob 4s ease-in-out infinite 0s; }
+  .av2 { animation: floatBob 4s ease-in-out infinite 0.5s; }
+  .av3 { animation: floatBob 4s ease-in-out infinite 1s; }
+  .av4 { animation: floatBob 4s ease-in-out infinite 1.5s; }
+  .av5 { animation: floatBob 4s ease-in-out infinite 2s; }
+
+  @keyframes uploadBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .step-card:hover .upload-arrow { animation: uploadBounce 1s ease-in-out infinite; }
+
+  .badge-check svg path, .check-path {
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    transition: stroke-dashoffset 0.4s ease-out;
+  }
+  .step-card:hover .badge-check svg path, .step-card:hover .check-path { stroke-dashoffset: 0; }
+  .step-card:hover .chk1 { transition-delay: 0s; }
+  .step-card:hover .chk2 { transition-delay: 0.2s; }
+  .step-card:hover .chk3 { transition-delay: 0.4s; }
+
+  @keyframes spinCompass { 100% { transform: rotate(360deg); } }
+  .compass-star { transform-origin: 35px 35px; }
+  .step-card.center:hover .compass-star { animation: spinCompass 6s linear infinite; }
+
+  .donut-arc {
+    stroke-dasharray: 80;
+    stroke-dashoffset: 80;
+    transition: stroke-dashoffset 0.8s ease-out;
+  }
+  .step-card:hover .donut-arc { stroke-dashoffset: 0; }
+
+  @keyframes pulseShield {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  .feature-item:hover .feat-secure { animation: pulseShield 1s ease-in-out infinite; }
+  
+  @keyframes expandTarget {
+    0% { transform: scale(0.9); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.8; }
+  }
+  .feature-item:hover .feat-target { animation: expandTarget 1.5s ease-in-out infinite; }
+
+  @keyframes nodBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+  .feature-item:hover .feat-node { animation: nodBounce 1s ease-in-out infinite; }
+  
+  @keyframes arrowSlideUp {
+    0% { transform: translate(-2px, 2px); opacity: 0.5; }
+    100% { transform: translate(2px, -2px); opacity: 1; }
+  }
+  .feature-item:hover .feat-graph { animation: arrowSlideUp 0.6s ease-out forwards; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 256 256" fill="none">
+        <circle cx="128" cy="128" r="96" stroke="#4f46e5" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+        <polygon points="160 96 144 144 96 160 112 112 160 96" fill="#4f46e5" stroke="#4f46e5" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span>CareerCompass<span style="color:var(--purple)">NG</span></span>
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Intelligent Guidance. <span>Brighter Futures.</span></h1>
+  <p>From academic records to career clarity – our smart system analyzes, recommends and empowers every student's future.</p>
+</div>
+
+<!-- FLOW SECTION -->
+<div class="flow-section">
+
+  <!-- Floating avatars left -->
+  <div class="avatar-float av1">
+    <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="14" r="8" fill="#a5b4fc"/><ellipse cx="20" cy="34" rx="12" ry="8" fill="#a5b4fc"/></svg>
+  </div>
+  <div class="avatar-float av2">
+    <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="14" r="8" fill="#c7d2fe"/><ellipse cx="20" cy="34" rx="12" ry="8" fill="#c7d2fe"/></svg>
+  </div>
+  <!-- Floating avatars right -->
+  <div class="avatar-float av3" style="background:#e0f2fe">
+    <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="13" r="8" fill="#7dd3fc"/><ellipse cx="20" cy="33" rx="12" ry="8" fill="#7dd3fc"/></svg>
+  </div>
+  <div class="avatar-float av4" style="background:#ede9fe">
+    <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="13" r="8" fill="#c4b5fd"/><ellipse cx="20" cy="33" rx="12" ry="8" fill="#c4b5fd"/></svg>
+  </div>
+  <div class="avatar-float av5" style="background:#fce7f3">
+    <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="13" r="8" fill="#f9a8d4"/><ellipse cx="20" cy="33" rx="12" ry="8" fill="#f9a8d4"/></svg>
+  </div>
+
+  <!-- Decorative dots -->
+  <div class="dot dot1"></div>
+  <div class="dot dot2"></div>
+  <div class="dot dot3"></div>
+
+  <!-- Wave SVG behind cards -->
+  <div class="wave-svg-wrap">
+    <svg viewBox="0 0 900 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+      <defs>
+        <linearGradient id="wg1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#7c3aed"/>
+          <stop offset="45%" stop-color="#818cf8"/>
+          <stop offset="55%" stop-color="#38bdf8"/>
+          <stop offset="100%" stop-color="#14b8a6"/>
+        </linearGradient>
+      </defs>
+      <path d="M0 40 C100 10, 150 70, 250 40 C350 10, 400 70, 500 40 C600 10, 650 70, 750 40 C820 20, 870 55, 900 40"
+            fill="none" stroke="url(#wg1)" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+    </svg>
+  </div>
+
+  <!-- Cards -->
+  <div class="cards-row">
+
+    <!-- Step 1 -->
+    <div class="step-wrapper">
+      <div class="step-card">
+        <svg class="card-icon" viewBox="0 0 80 80" fill="none">
+          <!-- Excel/file icon -->
+          <rect x="16" y="10" width="44" height="54" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+          <rect x="16" y="10" width="18" height="18" rx="3" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+          <text x="20" y="24" font-size="9" font-weight="700" fill="#16a34a">X</text>
+          <!-- lines -->
+          <rect x="22" y="34" width="32" height="3" rx="1.5" fill="#cbd5e1"/>
+          <rect x="22" y="42" width="24" height="3" rx="1.5" fill="#cbd5e1"/>
+          <rect x="22" y="50" width="28" height="3" rx="1.5" fill="#cbd5e1"/>
+          <!-- Upload tray -->
+          <rect x="22" y="55" width="32" height="14" rx="5" fill="#4f46e5"/>
+          <path class="upload-arrow" d="M38 61 L38 67 M35 63 L38 60 L41 63" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="step-num num-purple">01</div>
+      <div class="step-title">Upload Records</div>
+      <div class="step-desc">Upload students' academic records in Excel or CSV format.</div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-wrapper">
+      <div class="step-card">
+        <svg class="card-icon" viewBox="0 0 80 80" fill="none">
+          <rect x="18" y="14" width="40" height="50" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+          <rect x="26" y="24" width="24" height="3" rx="1.5" fill="#cbd5e1"/>
+          <rect x="26" y="32" width="20" height="3" rx="1.5" fill="#cbd5e1"/>
+          <rect x="26" y="40" width="22" height="3" rx="1.5" fill="#cbd5e1"/>
+          <!-- checkmarks -->
+          <circle cx="24" cy="25.5" r="4" fill="#e0e7ff"/>
+          <path class="check-path chk1" d="M22 25.5 L23.5 27 L26.5 24" stroke="#4f46e5" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="24" cy="33.5" r="4" fill="#e0e7ff"/>
+          <path class="check-path chk2" d="M22 33.5 L23.5 35 L26.5 32" stroke="#4f46e5" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="24" cy="41.5" r="4" fill="#e0e7ff"/>
+          <path class="check-path chk3" d="M22 41.5 L23.5 43 L26.5 40" stroke="#4f46e5" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="badge-check">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6 L5 9 L10 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div class="step-num num-violet">02</div>
+      <div class="step-title">Data Processing</div>
+      <div class="step-desc">We validate, organize and analyze the academic data securely.</div>
+    </div>
+
+    <!-- Step 3 – Center compass -->
+    <div class="step-wrapper">
+      <div class="step-card center">
+        <svg class="card-icon" viewBox="0 0 70 70" fill="none">
+          <!-- compass star -->
+          <circle cx="35" cy="35" r="30" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <!-- 8-point star -->
+          <g class="compass-star">
+            <path d="M35 10 L38 30 L55 20 L42 33 L62 35 L42 37 L55 50 L38 40 L35 60 L32 40 L15 50 L28 37 L8 35 L28 33 L15 20 L32 30 Z" fill="rgba(255,255,255,0.9)"/>
+          </g>
+          <!-- center dot -->
+          <circle cx="35" cy="35" r="5" fill="#e0e7ff"/>
+        </svg>
+      </div>
+      <div class="step-num num-blue" style="margin-top:22px">03</div>
+      <div class="step-title">Smart Analysis</div>
+      <div class="step-desc">Our engine evaluates performance, strengths and patterns.</div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-wrapper">
+      <div class="step-card">
+        <svg class="card-icon" viewBox="0 0 80 80" fill="none">
+          <!-- Donut chart centered -->
+          <circle cx="40" cy="40" r="18" fill="none" stroke="#e2e8f0" stroke-width="8"/>
+          <path class="donut-arc" d="M40 22 A18 18 0 0 1 58 40" fill="none" stroke="#14b8a6" stroke-width="8" stroke-linecap="round"/>
+          <path class="donut-arc" style="transition-delay: 0.3s;" d="M58 40 A18 18 0 0 1 40 58" fill="none" stroke="#38bdf8" stroke-width="8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="step-num num-teal">04</div>
+      <div class="step-title">Career Recommendation</div>
+      <div class="step-desc">Get personalized career pathway recommendations with reasoning.</div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-wrapper">
+      <div class="step-card">
+        <svg class="card-icon" viewBox="0 0 80 80" fill="none">
+          <rect x="18" y="12" width="40" height="52" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+          <rect x="26" y="22" width="28" height="4" rx="2" fill="#818cf8"/>
+          <rect x="26" y="31" width="22" height="3" rx="1.5" fill="#cbd5e1"/>
+          <rect x="26" y="39" width="26" height="3" rx="1.5" fill="#cbd5e1"/>
+          <rect x="26" y="47" width="18" height="3" rx="1.5" fill="#cbd5e1"/>
+        </svg>
+        <div class="badge-medal">
+          <svg viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="5" fill="#fbbf24"/>
+            <path d="M5 7 L6.5 8.5 L9.5 5.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="step-num num-teal2">05</div>
+      <div class="step-title">Guidance Report</div>
+      <div class="step-desc">Download, print or share the student's career guidance report.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="feature-item">
+    <svg class="feature-icon" viewBox="0 0 38 38" fill="none">
+      <rect width="38" height="38" rx="10" fill="#eef2ff"/>
+      <g class="feat-secure" style="transform-origin: 19px 21px;">
+        <rect x="10" y="10" width="18" height="22" rx="4" stroke="#4f46e5" stroke-width="1.8" fill="none"/>
+        <path d="M15 19 L17.5 21.5 L23 16" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <circle cx="27" cy="27" r="6" fill="#4f46e5"/>
+      <path d="M25 27 L26.5 28.5 L29.5 25.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <div class="feature-text">
+      <h4>Secure &amp; Private</h4>
+      <p>Your data is protected and confidential.</p>
+    </div>
+  </div>
+
+  <div class="feature-item">
+    <svg class="feature-icon" viewBox="0 0 38 38" fill="none">
+      <rect width="38" height="38" rx="10" fill="#eef2ff"/>
+      <g class="feat-target" style="transform-origin: 19px 19px;">
+        <circle cx="19" cy="19" r="9" stroke="#4f46e5" stroke-width="1.8" fill="none"/>
+        <circle cx="19" cy="19" r="4" stroke="#4f46e5" stroke-width="1.8" fill="none"/>
+      </g>
+      <line x1="19" y1="10" x2="19" y2="7" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="19" y1="29" x2="19" y2="31" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="10" y1="19" x2="7" y2="19" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="28" y1="19" x2="31" y2="19" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <div class="feature-text">
+      <h4>Accurate &amp; Smart</h4>
+      <p>AI-powered insights you can trust.</p>
+    </div>
+  </div>
+
+  <div class="feature-item">
+    <svg class="feature-icon" viewBox="0 0 38 38" fill="none">
+      <rect width="38" height="38" rx="10" fill="#eef2ff"/>
+      <g class="feat-node">
+        <circle cx="24" cy="14" r="4" stroke="#4f46e5" stroke-width="1.8" />
+        <path d="M20 22 C21.5 20.5 24 20 26 21 C28 22 29 24 29 27" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round" />
+      </g>
+      <circle cx="14" cy="16" r="4.5" stroke="#4f46e5" stroke-width="1.8" fill="#eef2ff"/>
+      <path d="M7 28 C7 23 10.5 21.5 14 21.5 C17.5 21.5 21 23 21 28" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round" fill="#eef2ff"/>
+    </svg>
+    <div class="feature-text">
+      <h4>Student-Centered</h4>
+      <p>Guiding every student towards their best future.</p>
+    </div>
+  </div>
+
+  <div class="feature-item">
+    <svg class="feature-icon" viewBox="0 0 38 38" fill="none">
+      <rect width="38" height="38" rx="10" fill="#eef2ff"/>
+      <rect x="9" y="24" width="5" height="8" rx="1.5" fill="#4f46e5"/>
+      <rect x="17" y="18" width="5" height="14" rx="1.5" fill="#4f46e5"/>
+      <rect x="25" y="12" width="5" height="20" rx="1.5" fill="#4f46e5"/>
+      <path class="feat-graph" d="M11.5 21 L19.5 15 L27.5 9" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="27.5" cy="9" r="2.5" fill="#4f46e5"/>
+    </svg>
+    <div class="feature-text">
+      <h4>Better Outcomes</h4>
+      <p>Informed decisions for better tomorrow.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <a href="/compass" class="cta-btn">
+    Get Started
+    <svg viewBox="0 0 20 20" fill="none"><path d="M4 10 H16 M11 5 L16 10 L11 15" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</div>
+
+</body>
+</html>

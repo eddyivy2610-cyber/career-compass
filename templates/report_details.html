@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Report: {{ session_tag }} - Career Compass{% endblock %}
+{% block page_title %}{{ session_tag }}{% endblock %}
+{% block page_subtitle %}Student Recommendations Details{% endblock %}
+
+{% block header_actions %}
+<a href="{{ url_for('export_reports', session_tag=session_tag) }}" class="btn primary-btn" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+    Export to CSV
+</a>
+<button class="btn outline-btn" onclick="window.print()" style="margin-left: 8px; background: white; border: 1px solid var(--border-color);">Print</button>
+<a href="/reports" class="btn action-btn" style="text-decoration: none; margin-left: 8px;">&larr; Back</a>
+{% endblock %}
+
+{% block content %}
+<main class="dashboard">
+    <section class="main-content" style="width: 100%;">
+        <div id="loading-indicator" style="text-align: center; padding: 40px; color: #64748b;">Loading students...</div>
+        
+        <div class="student-grid" id="student-grid" style="display: none;">
+            <!-- Rendered by JS -->
+        </div>
+
+        <!-- Pagination removed per request -->
+    </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const sessionTag = "{{ session_tag }}";
+    const grid = document.getElementById('student-grid');
+    const loading = document.getElementById('loading-indicator');
+
+    try {
+        const res = await fetch(`/api/report_details/${sessionTag}`);
+        const allStudents = await res.json();
+        
+        loading.style.display = 'none';
+        
+        if (allStudents.length === 0) {
+            grid.innerHTML = '<p style="text-align:center; width:100%; color:#64748b;">No records found.</p>';
+            grid.style.display = 'block';
+            return;
+        }
+
+        grid.style.display = 'grid';
+        renderStudents(allStudents);
+    } catch (err) {
+        loading.innerHTML = 'Error loading records.';
+    }
+
+    function renderStudents(students) {
+        grid.innerHTML = '';
+        students.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'student-card';
+            
+            const initial = s.student_name ? s.student_name.charAt(0).toUpperCase() : '?';
+            
+            // Build subjects HTML
+            let subjectsHtml = '';
+            if (s.top_subjects && s.top_subjects.length > 0) {
+                s.top_subjects.forEach((subj) => {
+                    subjectsHtml += `<div class="subj-tag">${subj}</div>`;
+                });
+            } else {
+                subjectsHtml = '<span style="color:#94a3b8; font-size:0.85rem;">No subjects available</span>';
+            }
+
+            // Build path scores progress bar
+            let progressHtml = '';
+            const paths = ['Science', 'Arts', 'Commercial', 'Vocational'];
+            const colors = ['#3b82f6', '#f59e0b', '#10b981', '#8b5cf6'];
+            
+            if (s.path_scores && Object.keys(s.path_scores).length > 0) {
+                progressHtml = '<div class="progress-bar-container">';
+                paths.forEach((p, idx) => {
+                    const score = s.path_scores[p] || 0;
+                    if (score > 0) {
+                        progressHtml += `<div class="progress-segment" style="width:${score}%; background-color:${colors[idx]};" title="${p}: ${score}%"></div>`;
+                    }
+                });
+                progressHtml += '</div>';
+                
+                // Legend
+                progressHtml += '<div class="progress-legend">';
+                paths.forEach((p, idx) => {
+                    const score = s.path_scores[p] || 0;
+                    if (score > 0) {
+                        progressHtml += `<span style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; margin-right:8px; color:#64748b;"><span style="width:8px;height:8px;border-radius:50%;background-color:${colors[idx]};"></span>${p} ${score}%</span>`;
+                    }
+                });
+                progressHtml += '</div>';
+            }
+
+            card.innerHTML = `
+                <div class="student-avatar">${initial}</div>
+                <h3 class="student-name">${s.student_name}</h3>
+                <p class="recommended-path">Recommended: <strong>${s.recommended_path}</strong></p>
+                
+                <div class="top-subjects-container">
+                    <p class="section-title">Top Performance</p>
+                    <div class="subjects-flex">${subjectsHtml}</div>
+                </div>
+
+                <div class="breakdown-container">
+                    <p class="section-title">Recommendation Breakdown</p>
+                    ${progressHtml}
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+});
+</script>
+{% endblock %}

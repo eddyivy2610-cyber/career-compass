@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Project specifics
+uploads/
+cache/
+career_compass.db
+career_compass.db-journal
+
+# Tests/Docs
+docs/careercompassng.html
+tests/mock_data/

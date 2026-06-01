@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+
+{% block title %}Single Entry - Career Compass{% endblock %}
+{% block page_title %}Single Student Entry{% endblock %}
+{% block page_subtitle %}Manually input an individual student's records{% endblock %}
+
+{% block header_actions %}
+<a href="/compass" class="btn action-btn" style="text-decoration: none;">&larr; Back to Selection</a>
+{% endblock %}
+
+{% block content %}
+<main class="dashboard">
+    <section class="main-content" style="width: 100%;">
+        <div class="panel" style="padding: 24px;">
+            <div style="display: flex; gap: 24px; margin-bottom: 24px;">
+                <div style="flex: 1;">
+                    <label style="display: block; font-weight: 500; margin-bottom: 8px; color: var(--text-color);">Student Name *</label>
+                    <input type="text" id="single-student-name" placeholder="e.g. John Doe" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;">
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 1000px;" id="single-entry-table">
+                    <thead>
+                        <tr style="background-color: #f8fafc; text-align: left;">
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">Subject</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">JS1 T1</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">JS1 T2</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">JS1 T3</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">JS2 T1</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">JS2 T2</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">JS2 T3</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">JS3 T1</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">JS3 T2</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color);">JS3 T3</th>
+                            <th style="padding: 12px; border-bottom: 2px solid var(--border-color); width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="single-entry-tbody">
+                        <!-- Rows added by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <button class="btn outline-btn" id="add-row-btn" style="width: auto;">+ Add Subject</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 24px;">
+                <button class="btn outline-btn" id="clear-form-btn" style="color: var(--error); border-color: var(--error);">Clear Form</button>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <span id="save-status" style="color: #64748b; font-size: 0.9rem;"></span>
+                    <button class="btn primary-btn" id="run-single-engine-btn" style="width: auto; padding: 12px 24px; font-size: 1.05rem;">Process Student</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<datalist id="subject-list">
+    <option value="Mathematics">
+    <option value="English Language">
+    <option value="Basic Science">
+    <option value="Basic Technology">
+    <option value="Social Studies">
+    <option value="Civic Education">
+    <option value="Business Studies">
+    <option value="Computer Studies">
+    <option value="Agricultural Science">
+    <option value="Home Economics">
+    <option value="Cultural & Creative Arts">
+    <option value="CRS/IRS">
+</datalist>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tbody = document.getElementById('single-entry-tbody');
+    const addRowBtn = document.getElementById('add-row-btn');
+    const clearFormBtn = document.getElementById('clear-form-btn');
+    const runBtn = document.getElementById('run-single-engine-btn');
+    const saveStatus = document.getElementById('save-status');
+    const nameInput = document.getElementById('single-student-name');
+
+    const STORAGE_KEY = 'career_compass_single_entry';
+    const terms = ['JS1_T1', 'JS1_T2', 'JS1_T3', 'JS2_T1', 'JS2_T2', 'JS2_T3', 'JS3_T1', 'JS3_T2', 'JS3_T3'];
+
+    // Auto-save debouncer
+    let saveTimeout;
+    function triggerSave() {
+        saveStatus.textContent = 'Saving...';
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(saveState, 500);
+    }
+
+    function createRow(data = null) {
+        const tr = document.createElement('tr');
+        
+        // Build Selects
+        const selectsHtml = terms.map(col => `
+            <td style="padding: 8px; border-bottom: 1px solid var(--border-color);">
+                <select class="grade-select" data-col="${col}" style="width: 100%; padding: 6px; border: 1px solid var(--border-color); border-radius: 4px; background: white;">
+                    <option value="">-</option>
+                    <option value="A" ${data && data[col] === 'A' ? 'selected' : ''}>A</option>
+                    <option value="B" ${data && data[col] === 'B' ? 'selected' : ''}>B</option>
+                    <option value="C" ${data && data[col] === 'C' ? 'selected' : ''}>C</option>
+                    <option value="D" ${data && data[col] === 'D' ? 'selected' : ''}>D</option>
+                    <option value="E" ${data && data[col] === 'E' ? 'selected' : ''}>E</option>
+                    <option value="F" ${data && data[col] === 'F' ? 'selected' : ''}>F</option>
+                </select>
+            </td>
+        `).join('');
+
+        tr.innerHTML = `
+            <td style="padding: 8px; border-bottom: 1px solid var(--border-color);">
+                <input type="text" class="subj-input" list="subject-list" value="${data && data.subject ? data.subject : ''}" style="width: 100%; padding: 6px; border: 1px solid var(--border-color); border-radius: 4px;" placeholder="Subject">
+            </td>
+            ${selectsHtml}
+            <td style="padding: 8px; border-bottom: 1px solid var(--border-color); text-align: center;">
+                <button class="icon-btn remove-row-btn" style="color: var(--error);">&times;</button>
+            </td>
+        `;
+
+        // Attach events
+        tr.querySelector('.remove-row-btn').addEventListener('click', () => {
+            tr.remove();
+            triggerSave();
+        });
+
+        tr.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('change', triggerSave);
+            el.addEventListener('keyup', triggerSave);
+        });
+
+        tbody.appendChild(tr);
+    }
+
+    function saveState() {
+        const state = {
+            name: nameInput.value,
+            subjects: []
+        };
+
+        tbody.querySelectorAll('tr').forEach(tr => {
+            const subj = tr.querySelector('.subj-input').value;
+            if (!subj.trim()) return;
+
+            const rowData = { subject: subj };
+            tr.querySelectorAll('.grade-select').forEach(sel => {
+                if (sel.value) rowData[sel.dataset.col] = sel.value;
+            });
+            state.subjects.push(rowData);
+        });
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        
+        const d = new Date();
+        saveStatus.textContent = `Auto-saved at ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+    }
+
+    function loadState() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                const state = JSON.parse(saved);
+                nameInput.value = state.name || '';
+                
+                if (state.subjects && state.subjects.length > 0) {
+                    state.subjects.forEach(data => createRow(data));
+                } else {
+                    // Create default empty rows
+                    for(let i=0; i<3; i++) createRow();
+                }
+            } catch(e) {
+                for(let i=0; i<3; i++) createRow();
+            }
+        } else {
+            for(let i=0; i<3; i++) createRow();
+        }
+    }
+
+    // Init
+    loadState();
+    nameInput.addEventListener('keyup', triggerSave);
+
+    addRowBtn.addEventListener('click', () => {
+        createRow();
+        triggerSave();
+    });
+
+    clearFormBtn.addEventListener('click', () => {
+        if (confirm("Are you sure you want to clear the entire form? This cannot be undone.")) {
+            localStorage.removeItem(STORAGE_KEY);
+            tbody.innerHTML = '';
+            nameInput.value = '';
+            saveStatus.textContent = '';
+            for(let i=0; i<3; i++) createRow();
+        }
+    });
+
+    runBtn.addEventListener('click', async () => {
+        if (!nameInput.value.trim()) {
+            alert("Student Name is required.");
+            nameInput.focus();
+            return;
+        }
+
+        // Force a final save to get the latest state
+        saveState();
+        const payload = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+        if (payload.subjects.length === 0) {
+            alert("Please add at least one subject with grades.");
+            return;
+        }
+
+        runBtn.disabled = true;
+        runBtn.innerHTML = 'Processing... <span class="spinner" style="width:14px;height:14px;border:2px solid #fff;border-top:2px solid transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>';
+
+        try {
+            const res = await fetch('/upload_single_student', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                // Clear the form to prevent accidental double submission later
+                localStorage.removeItem(STORAGE_KEY);
+                // Redirect directly to the report page
+                window.location.href = `/report/${data.session_tag}`;
+            } else {
+                alert("Error processing student: " + data.error);
+                runBtn.disabled = false;
+                runBtn.textContent = 'Process Student';
+            }
+        } catch(e) {
+            alert("Network error.");
+            runBtn.disabled = false;
+            runBtn.textContent = 'Process Student';
+        }
+    });
+});
+</script>
+{% endblock %}

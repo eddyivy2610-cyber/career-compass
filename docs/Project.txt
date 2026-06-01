@@ -1,0 +1,439 @@
+# Updated MVP Platform Structure
+
+Your frontend can now be organized into 4 primary modules/pages:
+
+| Module          | Purpose                   |
+| --------------- | ------------------------- |
+| Dashboard       | Visualization & analytics |
+| Results History | Organized student records |
+| Compass         | Career analysis engine    |
+| Reports         | Download/print outputs    |
+
+This is a very strong structure.
+
+---
+
+# 1. SESSION-BASED BATCH DATA ENTRY
+
+Excellent idea.
+
+Instead of mixing uploads randomly, every upload belongs to a:
+
+# Session ID
+
+Example:
+
+| Session ID  | Meaning              |
+| ----------- | -------------------- |
+| 2023_JS1_T1 | JS1 First Term 2023  |
+| 2024_JS2_T2 | JS2 Second Term 2024 |
+
+This prevents:
+
+* class conflicts,
+* duplicate imports,
+* mixed term analysis.
+
+---
+
+# Recommended Upload Metadata
+
+When uploading:
+
+| Field      | Example |
+| ---------- | ------- |
+| Session    | 2024    |
+| Class      | JS2     |
+| Term       | 2nd     |
+| Sheet Name | JS2_T2  |
+
+Then internally generate:
+
+```text id="9rpr0h"
+2024_JS2_T2
+```
+
+That becomes your unique dataset identifier.
+
+---
+
+# Why This Is Smart
+
+Because your system can now:
+
+✅ isolate batches
+✅ compare sessions
+✅ rebuild student timelines
+✅ avoid overwriting data
+✅ filter by academic period
+
+Very realistic architecture.
+
+---
+
+# 2. DASHBOARD PAGE
+
+This becomes your visualization hub.
+
+Purpose:
+
+# overview and analytics.
+
+---
+
+# Dashboard Features
+
+## Functional Features
+
+| Feature              | Purpose                  |
+| -------------------- | ------------------------ |
+| Session selector     | Switch uploaded datasets |
+| Quick filters        | Narrow records           |
+| Student search       | Fast lookup              |
+| Navigation shortcuts | Access analysis quickly  |
+
+---
+
+# Display Features
+
+| Feature                     | Purpose              |
+| --------------------------- | -------------------- |
+| Charts                      | Visual summaries     |
+| Statistic cards             | Quick insights       |
+| Trend indicators            | Performance overview |
+| Recommendation distribution | Career breakdown     |
+
+---
+
+# Suggested Dashboard Widgets
+
+---
+
+## A. Career Recommendation Distribution
+
+Example:
+
+| Career Path | Students |
+| ----------- | -------- |
+| Science     | 45       |
+| Arts        | 20       |
+| Commercial  | 15       |
+| Vocational  | 10       |
+
+---
+
+## B. Recommendation Confidence Levels
+
+Useful for incomplete data tracking.
+
+---
+
+## C. Subject Performance Trends
+
+Useful for analytics/demo impact.
+
+---
+
+# Dashboard Cards
+
+Recommended summary cards:
+
+| Card               | Example |
+| ------------------ | ------- |
+| Total Students     | 120     |
+| Uploaded Sessions  | 8       |
+| Completed Analyses | 90      |
+| Pending Reviews    | 15      |
+
+---
+
+# 3. RESULTS HISTORY PAGE
+
+Excellent addition.
+
+This becomes:
+
+# the organized academic archive.
+
+---
+
+# Purpose
+
+Allow users to:
+
+* browse historical analyses,
+* revisit recommendations,
+* compare previous results.
+
+---
+
+# Functional Features
+
+| Feature                | Purpose             |
+| ---------------------- | ------------------- |
+| Search by student      | Fast retrieval      |
+| Filter by session      | Historical analysis |
+| Filter by class        | Narrow dataset      |
+| Sort by recommendation | Group pathways      |
+| Open detailed report   | View analysis       |
+
+---
+
+# Display Features
+
+| Feature             | Purpose               |
+| ------------------- | --------------------- |
+| Data tables         | Organized records     |
+| Status badges       | Recommendation status |
+| Timeline indicators | Historical context    |
+
+---
+
+# Example Table
+
+| Student | Class | Recommendation | Confidence |
+| ------- | ----- | -------------- | ---------- |
+| Musa    | JS3   | Science        | High       |
+| Ada     | JS2   | Commercial     | Medium     |
+
+---
+
+# 4. COMPASS PAGE
+
+This is the CORE of your application.
+
+Very good naming choice.
+
+This page should feel like:
+
+# the intelligence center.
+
+---
+
+# Purpose
+
+Perform:
+
+* analysis,
+* recommendation generation,
+* evaluation,
+* counselor review.
+
+---
+
+# Compass Features
+
+## Functional Features
+
+| Feature         | Purpose               |
+| --------------- | --------------------- |
+| Select student  | Choose profile        |
+| Run analysis    | Execute engine        |
+| Manual override | Counselor correction  |
+| Apply filters   | Narrow analysis       |
+| Re-run analysis | Update recommendation |
+
+---
+
+# Display Features
+
+| Feature             | Purpose              |
+| ------------------- | -------------------- |
+| Recommendation card | Main output          |
+| Suitability chart   | Comparative analysis |
+| Reasoning section   | Explainability       |
+| Academic timeline   | Progress analysis    |
+| Confidence meter    | Data reliability     |
+
+---
+
+# Suggested Compass Layout
+
+```text id="f5kxvx"
+--------------------------------
+Student Profile
+--------------------------------
+
+Academic Timeline
+Subject Strengths
+Questionnaire Results
+
+--------------------------------
+Recommendation Engine
+--------------------------------
+
+[ Run Analysis ]
+
+--------------------------------
+Suggested Path:
+SCIENCE
+--------------------------------
+```
+
+---
+
+# 5. PRE-ANALYSIS FILTER SYSTEM
+
+This is a VERY strong feature.
+
+It makes the platform feel professional.
+
+---
+
+# Purpose
+
+Allows targeted analysis before processing.
+
+---
+
+# Suggested Filters
+
+| Filter           | Purpose                   |
+| ---------------- | ------------------------- |
+| Session          | Specific upload period    |
+| Class            | JS1/JS2/JS3               |
+| Student Name     | Individual lookup         |
+| Student ID       | Precise retrieval         |
+| Career Path      | Filter recommendations    |
+| Confidence Level | Incomplete data detection |
+| Score Range      | High/low performers       |
+
+---
+
+# Example Use Cases
+
+## Example 1
+
+```text id="b4tws6"
+Show only students suitable for Science.
+```
+
+---
+
+## Example 2
+
+```text id="h7gztw"
+Analyze only JS3 students with complete records.
+```
+
+---
+
+## Example 3
+
+```text id="p0ggmh"
+Find students with high vocational aptitude.
+```
+
+This becomes VERY impressive during demo.
+
+---
+
+# 6. DOWNLOAD & PRINT FEATURES
+
+Absolutely necessary.
+
+Makes the platform feel complete.
+
+---
+
+# Suggested Export Options
+
+| Feature      | Purpose                  |
+| ------------ | ------------------------ |
+| Download PDF | Formal reports           |
+| Print Report | Physical counseling copy |
+| Export CSV   | Data portability         |
+
+---
+
+# Report Should Include
+
+| Section           | Purpose        |
+| ----------------- | -------------- |
+| Student Summary   | Identity       |
+| Academic Overview | Performance    |
+| Recommendation    | Suggested path |
+| Confidence Level  | Reliability    |
+| Suggested Careers | Guidance       |
+| Counselor Notes   | Manual review  |
+
+---
+
+# 7. Updated System Flow
+
+```text id="ljr94m"
+Upload Session Data
+        ↓
+Organize Student Histories
+        ↓
+Apply Pre-Analysis Filters
+        ↓
+Select Student(s)
+        ↓
+Run Compass Analysis
+        ↓
+Generate Recommendation
+        ↓
+Store in Results History
+        ↓
+Download / Print Report
+```
+
+---
+
+# 8. Your MVP Is Now Closer To
+
+A combination of:
+
+* academic analytics platform,
+* career advisory system,
+* student profiling dashboard,
+* educational decision-support tool.
+
+This is MUCH stronger than a basic “career recommendation website.”
+
+---
+
+# 9. MOST IMPORTANT THING
+
+Your platform now has:
+
+# workflow.
+
+That is what makes systems feel real.
+
+Instead of:
+“upload file → random output”
+
+you now have:
+
+```text id="9ot7a7"
+Data Import
+→ Organization
+→ Filtering
+→ Analysis
+→ Review
+→ Reporting
+```
+
+That is a professional architecture.
+
+
+Career Recommendation Distribution
+
+Number of students recommended for each academic pathway.
+
+path	students
+Science	45
+Arts	20
+Commercial	15
+Vocational	10
+
+Recommendation Confidence Levels
+
+Distribution of recommendation confidence across analyzed students.
+
+confidence	count
+High	60
+Medium	20
+Low	10

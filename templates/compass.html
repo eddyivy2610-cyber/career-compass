@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+
+{% block title %}Compass - Career Compass{% endblock %}
+{% block page_title %}Compass{% endblock %}
+{% block page_subtitle %}Upload Terminal Result Sheets to begin analysis{% endblock %}
+
+{% block header_actions %}
+<!-- Removed Run Button from header per request -->
+{% endblock %}
+
+{% block content %}
+<main class="dashboard">
+    <section class="main-content" style="width: 100%;">
+        <div class="panel" style="background: transparent; box-shadow: none;">
+            <p style="color: #64748b; margin-top: 0; margin-bottom: 24px;">Drag and drop the wide-format result sheets (.csv, .xlsx) for each class and term into their corresponding slots below.</p>
+            
+            <div class="upload-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <!-- JS1 -->
+                <div class="term-dropzone panel" data-class="JS1" data-term="Term1">
+                    <h4 style="margin:0 0 8px 0;">JS1 - Term 1</h4>
+                    <input type="file" class="file-input" style="display:none;" accept=".csv, .xlsx, .xls">
+                    <p class="status-text" style="color:#94a3b8; font-size:0.85rem; margin:0;">Drop file here or click</p>
+                </div>
+                <div class="term-dropzone panel" data-class="JS1" data-term="Term2">
+                    <h4 style="margin:0 0 8px 0;">JS1 - Term 2</h4>
+                    <input type="file" class="file-input" style="display:none;" accept=".csv, .xlsx, .xls">
+                    <p class="status-text" style="color:#94a3b8; font-size:0.85rem; margin:0;">Drop file here or click</p>
+                </div>
+                <div class="term-dropzone panel" data-class="JS1" data-term="Term3">
+                    <h4 style="margin:0 0 8px 0;">JS1 - Term 3</h4>
+                    <input type="file" class="file-input" style="display:none;" accept=".csv, .xlsx, .xls">
+                    <p class="status-text" style="color:#94a3b8; font-size:0.85rem; margin:0;">Drop file here or click</p>
+                </div>
+
+                <!-- JS2 -->
+                <div class="term-dropzone panel" data-class="JS2" data-term="Term1">
+                    <h4 style="margin:0 0 8px 0;">JS2 - Term 1</h4>
+                    <input type="file" class="file-input" style="display:none;" accept=".csv, .xlsx, .xls">
+                    <p class="status-text" style="color:#94a3b8; font-size:0.85rem; margin:0;">Drop file here or click</p>
+                </div>
+                <div class="term-dropzone panel" data-class="JS2" data-term="Term2">
+                    <h4 style="margin:0 0 8px 0;">JS2 - Term 2</h4>
+                    <input type="file" class="file-input" style="display:none;" accept=".csv, .xlsx, .xls">
+                    <p class="status-text" style="color:#94a3b8; font-size:0.85rem; margin:0;">Drop file here or click</p>
+                </div>
+                <div class="term-dropzone panel" data-class="JS2" data-term="Term3">
+                    <h4 style="margin:0 0 8px 0;">JS2 - Term 3</h4>
+                    <input type="file" class="file-input" style="display:none;" accept=".csv, .xlsx, .xls">
+                    <p class="status-text" style="color:#94a3b8; font-size:0.85rem; margin:0;">Drop file here or click</p>
+                </div>
+
+                <!-- JS3 -->
+                <div class="term-dropzone panel" data-class="JS3" data-term="Term1">
+                    <h4 style="margin:0 0 8px 0;">JS3 - Term 1</h4>
+                    <input type="file" class="file-input" style="display:none;" accept=".csv, .xlsx, .xls">
+                    <p class="status-text" style="color:#94a3b8; font-size:0.85rem; margin:0;">Drop file here or click</p>
+                </div>
+                <div class="term-dropzone panel" data-class="JS3" data-term="Term2">
+                    <h4 style="margin:0 0 8px 0;">JS3 - Term 2</h4>
+                    <input type="file" class="file-input" style="display:none;" accept=".csv, .xlsx, .xls">
+                    <p class="status-text" style="color:#94a3b8; font-size:0.85rem; margin:0;">Drop file here or click</p>
+                </div>
+                <div class="term-dropzone panel" data-class="JS3" data-term="Term3">
+                    <h4 style="margin:0 0 8px 0;">JS3 - Term 3</h4>
+                    <input type="file" class="file-input" style="display:none;" accept=".csv, .xlsx, .xls">
+                    <p class="status-text" style="color:#94a3b8; font-size:0.85rem; margin:0;">Drop file here or click</p>
+                </div>
+            </div>
+
+            <div style="text-align: right; margin-top: 32px;">
+                <button id="check-exemptions-btn" class="btn primary-btn" style="width:auto; padding: 12px 24px; font-size:1.05rem;">Scan & Run Engine</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exemptions Modal -->
+    <div id="exemptions-modal" class="modal hidden">
+        <div class="modal-content panel" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 style="color:var(--text-color);">Data Warnings & Exemptions</h2>
+                <button id="close-exemptions-btn" class="icon-btn">&times;</button>
+            </div>
+            <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                <p style="color: #64748b; margin-top:0;">The following students have missing result sheets. The engine will use available averages, but accuracy may be reduced.</p>
+                <div id="exemptions-list" style="margin-top: 16px;">
+                    <!-- JS populated -->
+                </div>
+                <div id="exemptions-loading" style="text-align:center; padding: 24px; color:#64748b; font-style:italic;">Scanning records...</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn outline-btn" id="cancel-exemptions-btn">Cancel</button>
+                <button class="btn primary-btn" id="confirm-run-btn" style="width:auto; margin-left:12px;" disabled>Confirm & Run Engine</button>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.term-dropzone {
+    border: 2px dashed #cbd5e1;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 32px 16px;
+    background: #f8fafc;
+}
+.term-dropzone:hover, .term-dropzone.dragover {
+    border-color: var(--primary-blue);
+    background-color: #f1f5f9;
+}
+.term-dropzone.success {
+    border-color: var(--success);
+    border-style: solid;
+    background-color: #f0fdf4;
+}
+.term-dropzone.error {
+    border-color: var(--error);
+    background-color: #fef2f2;
+}
+.exemption-item {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Setup Dropzones
+    document.querySelectorAll('.term-dropzone').forEach(dropzone => {
+        const fileInput = dropzone.querySelector('.file-input');
+        const statusText = dropzone.querySelector('.status-text');
+        const className = dropzone.dataset.class;
+        const termName = dropzone.dataset.term;
+
+        dropzone.addEventListener('click', () => fileInput.click());
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        });
+
+        dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                uploadFile(e.dataTransfer.files[0], dropzone, className, termName, statusText);
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) {
+                uploadFile(fileInput.files[0], dropzone, className, termName, statusText);
+            }
+        });
+    });
+
+    async function uploadFile(file, dropzone, cls, term, statusEl) {
+        statusEl.textContent = 'Uploading...';
+        dropzone.classList.remove('success', 'error');
+        
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const res = await fetch(`/upload_term_file/${cls}/${term}`, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            
+            if (res.ok) {
+                dropzone.classList.add('success');
+                statusEl.innerHTML = `<span style="color:var(--success); font-weight:600;">Uploaded (${data.processed} students)</span>`;
+            } else {
+                dropzone.classList.add('error');
+                statusEl.innerHTML = `<span style="color:var(--error);">${data.error}</span>`;
+            }
+        } catch (err) {
+            dropzone.classList.add('error');
+            statusEl.innerHTML = `<span style="color:var(--error);">Network Error</span>`;
+        }
+    }
+
+    // 2. Scan & Exemptions Flow
+    const scanBtn = document.getElementById('check-exemptions-btn');
+    const modal = document.getElementById('exemptions-modal');
+    const closeBtn = document.getElementById('close-exemptions-btn');
+    const cancelBtn = document.getElementById('cancel-exemptions-btn');
+    const runBtn = document.getElementById('confirm-run-btn');
+    const exemptionsList = document.getElementById('exemptions-list');
+    const exemptionsLoading = document.getElementById('exemptions-loading');
+
+    const closeModal = () => modal.classList.add('hidden');
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    scanBtn.addEventListener('click', async () => {
+        modal.classList.remove('hidden');
+        exemptionsList.innerHTML = '';
+        exemptionsLoading.style.display = 'block';
+        runBtn.disabled = true;
+
+        try {
+            const res = await fetch('/api/check_exemptions');
+            const data = await res.json();
+            exemptionsLoading.style.display = 'none';
+            runBtn.disabled = false;
+
+            if (data.length === 0) {
+                exemptionsList.innerHTML = `<div style="padding:16px; text-align:center; color:var(--success); font-weight:500;">All clear! No missing data detected.</div>`;
+            } else {
+                data.forEach(ex => {
+                    const div = document.createElement('div');
+                    div.className = 'exemption-item';
+                    div.innerHTML = `<strong>${ex.name} (${ex.student_id})</strong><br><span style="color:#64748b; font-size:0.85rem;">Missing: ${ex.missing}</span>`;
+                    exemptionsList.appendChild(div);
+                });
+            }
+        } catch(e) {
+            exemptionsLoading.innerHTML = `<span style="color:var(--error);">Failed to scan records.</span>`;
+        }
+    });
+
+    // 3. Confirm & Run Engine
+    runBtn.addEventListener('click', async () => {
+        runBtn.innerHTML = 'Running... <span class="spinner" style="width:14px;height:14px;border:2px solid #fff;border-top:2px solid transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>';
+        runBtn.disabled = true;
+        cancelBtn.disabled = true;
+
+        try {
+            const res = await fetch('/run_engine', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                window.location.href = `/report/${data.session_tag}`;
+            } else {
+                alert("Engine error: " + data.error);
+                closeModal();
+            }
+        } catch(e) {
+            alert("Network error starting engine.");
+            closeModal();
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Career Compass{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <svg class="compass-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/><polygon points="160 96 144 144 96 160 112 112 160 96" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+            </div>
+            <span class="logo-text">Compass</span>
+        </div>
+        <div class="nav-links">
+            <div class="nav-indicator"></div>
+            <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">Home</a>
+            <a href="/compass" class="nav-item {% if request.path == '/compass' %}active{% endif %}">Compass</a>
+            <a href="/reports" class="nav-item {% if request.path == '/reports' %}active{% endif %}">Reports</a>
+        </div>
+        <div class="user-section">
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Counselor&background=E2E8F0&color=475569" alt="User">
+                <div class="user-info">
+                    <span class="user-name">Counselor Team</span>
+                    <span class="user-email">counselor@school.edu</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="header-titles">
+            <h1>{% block page_title %}Counselor Dashboard{% endblock %}</h1>
+            <p>{% block page_subtitle %}Your current student overview and activity{% endblock %}</p>
+        </div>
+        <div class="header-actions">
+            {% block header_actions %}
+            <div class="month-dropdown">
+                <span>This Month</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M213.66 101.66l-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 162.34l74.34-74.34a8 8 0 0 1 11.32 11.32Z"/></svg>
+            </div>
+            <button class="btn action-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M104 200H40a8 8 0 0 1-8-8V40a8 8 0 0 1 8-8h176a8 8 0 0 1 8 8v64a8 8 0 0 1-16 0V48H48v136h56a8 8 0 0 1 0 16Zm125.66-82.34l-40-40a8 8 0 0 0-11.32 11.32L204.69 115H128a8 8 0 0 0 0 16h76.69l-26.35 26.34a8 8 0 0 0 11.32 11.32l40-40a8 8 0 0 0 0-11.32Z"/></svg>
+                Export
+            </button>
+            <button class="btn filter-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M200 136a8 8 0 0 1-8 8H64a8 8 0 0 1 0-16h128a8 8 0 0 1 8 8Zm-32 40H88a8 8 0 0 0 0 16h80a8 8 0 0 0 0-16Zm56-96H32a8 8 0 0 0 0 16h192a8 8 0 0 0 0-16Z"/></svg>
+                Filter
+            </button>
+            {% endblock %}
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="app-footer">
+        <p>&copy; 2024 Career Compass NG. Guiding Futures. Smart Choices.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

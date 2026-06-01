@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports - Career Compass{% endblock %}
+{% block page_title %}Reports & Exports{% endblock %}
+{% block page_subtitle %}Generate and download final recommendation outputs{% endblock %}
+
+{% block header_actions %}
+{% endblock %}
+
+{% block content %}
+<main class="dashboard">
+    <section class="main-content" style="width: 100%;">
+        <div class="panel" style="padding: 0; background: transparent; box-shadow: none;">
+            <div class="report-grid" id="report-grid">
+                {% if sessions %}
+                    {% for session in sessions %}
+                    <div class="report-card" data-session="{{ session.session_tag }}">
+                        <button class="delete-report-btn" title="Delete Report" data-session="{{ session.session_tag }}">&times;</button>
+                        <div class="report-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"><path fill="currentColor" d="M216 40v176a16 16 0 0 1-16 16H56a16 16 0 0 1-16-16V40a16 16 0 0 1 16-16h144a16 16 0 0 1 16 16Zm-64 88a32 32 0 1 0-32 32a32 32 0 0 0 32-32Zm48 0a32 32 0 1 0-32 32a32 32 0 0 0 32-32Z"/></svg>
+                        </div>
+                        <h3>{{ session.session_tag }}</h3>
+                        <p>{{ session.student_count }} Students Analyzed</p>
+                        <span class="report-date">{{ session.last_date }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #64748b; width: 100%; text-align:center; margin-top:40px;">No reports generated yet. Head over to Compass to start!</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Handle Card Click (Navigate to new page)
+    document.querySelectorAll('.report-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Ignore if clicking the delete button
+            if (e.target.classList.contains('delete-report-btn')) return;
+
+            const sessionTag = card.dataset.session;
+            window.location.href = `/report/${sessionTag}`;
+        });
+    });
+
+    // Handle Delete Click
+    document.querySelectorAll('.delete-report-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const sessionTag = btn.dataset.session;
+            
+            if (confirm(`Are you sure you want to delete report '${sessionTag}'?`)) {
+                try {
+                    const res = await fetch(`/api/delete_report/${sessionTag}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        btn.closest('.report-card').remove();
+                    } else {
+                        alert("Failed to delete report.");
+                    }
+                } catch (err) {
+                    alert("Error deleting report.");
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
